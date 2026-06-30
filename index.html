@@ -96,6 +96,13 @@
         </div>
         
         <form id="contactForm" class="minimal-form" novalidate>
+          <!-- ▼▼▼ 重要:把下面 value="..." 內的文字換成你的 Web3Forms Access Key ▼▼▼ -->
+          <input type="hidden" name="access_key" value="ae41fbf1-e4b3-4005-b3ce-e662ea3cabe4">
+          <!-- ▲▲▲ 換好之後,表單查詢就會自動寄到 info@ntam.com.hk ▲▲▲ -->
+          <input type="hidden" name="subject" value="New enquiry from NTAM website">
+          <input type="hidden" name="from_name" value="NTAM Website">
+          <!-- 防垃圾訊息用,訪客看不到,請勿刪除 -->
+          <input type="checkbox" name="botcheck" style="display:none;" tabindex="-1" autocomplete="off">
           <div class="form-group">
             <input type="text" id="name" name="name" class="form-control" placeholder="Name" required>
           </div>
