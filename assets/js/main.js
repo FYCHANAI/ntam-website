@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const formMessage = document.getElementById('formMessage');
 
   if (contactForm && formMessage) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       // Retrieve form fields
@@ -113,14 +113,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const email = document.getElementById('email').value.trim();
       const message = document.getElementById('message').value.trim();
 
-      // Clear previous messages
+      // Reset message state
       formMessage.style.display = 'none';
       formMessage.className = 'form-message';
 
       // Validation
       if (!name || !email || !message) {
         formMessage.textContent = 'Please fill in all required fields (Name, Email, Message).';
-        formMessage.classList.add('error');
+        formMessage.className = 'form-message error';
+        formMessage.style.display = 'block';
         return;
       }
 
@@ -128,19 +129,53 @@ document.addEventListener('DOMContentLoaded', () => {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         formMessage.textContent = 'Please provide a valid email address.';
-        formMessage.classList.add('error');
+        formMessage.className = 'form-message error';
+        formMessage.style.display = 'block';
         return;
       }
 
-      // Simulate API submit
+      // Enter submitting state
+      const submitBtn = contactForm.querySelector('.form-submit-btn');
+      const originalBtnText = submitBtn ? submitBtn.textContent : 'Submit';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+      }
       formMessage.textContent = 'Submitting...';
-      formMessage.classList.add('success');
+      formMessage.className = 'form-message success';
       formMessage.style.display = 'block';
 
-      setTimeout(() => {
-        formMessage.textContent = 'Thanks for submitting!';
-        contactForm.reset();
-      }, 1000);
+      // Send via Web3Forms — automatically gathers all fields, including the hidden access_key
+      try {
+        const payload = Object.fromEntries(new FormData(contactForm).entries());
+        const response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+
+        if (result.success) {
+          formMessage.textContent = 'Thank you! Your message has been sent. We will get back to you shortly.';
+          formMessage.className = 'form-message success';
+          contactForm.reset();
+        } else {
+          formMessage.textContent = 'Sorry, your message could not be sent. Please email us directly at info@ntam.com.hk.';
+          formMessage.className = 'form-message error';
+        }
+      } catch (err) {
+        formMessage.textContent = 'Network error. Please email us directly at info@ntam.com.hk.';
+        formMessage.className = 'form-message error';
+      } finally {
+        formMessage.style.display = 'block';
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalBtnText;
+        }
+      }
     });
   }
 });
