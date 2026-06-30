@@ -470,29 +470,43 @@ footer.site-footer {
   color: var(--color-primary);
 }
 
+/* Team page: wider fluid container so landscape/desktop fills the screen, no empty side bands */
+.content-container.team-wide {
+  max-width: 1760px;
+  width: 94%;
+  padding: 0;
+}
+
 .team-members-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
-  margin-bottom: 40px;
+  /* auto-fit + 1fr stretches cards edge-to-edge in any orientation (portrait & landscape) */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 28px;
+  margin-bottom: 50px;
 }
 
 .team-member-card {
   background-color: var(--color-white);
   border: 1px solid var(--color-border);
-  padding: 20px;
+  padding: 0 0 22px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  overflow: hidden;
+  transition: var(--transition-normal);
+}
+
+.team-member-card:hover {
+  box-shadow: 0 8px 24px rgba(3, 68, 89, 0.10);
+  transform: translateY(-3px);
 }
 
 .team-member-photo-container {
-  width: 147px;
-  height: 98px; /* Original Wix sizes */
+  width: 100%;
+  aspect-ratio: 4 / 5;            /* enlarged portrait frame, fills the whole card width */
   background-color: var(--color-bg-light);
-  border: 1px solid var(--color-border);
-  margin-bottom: 15px;
+  margin-bottom: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -503,28 +517,32 @@ footer.site-footer {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center top;   /* keep faces in frame when cropping */
 }
 
 .team-member-initials {
-  font-size: 24px;
+  font-size: clamp(36px, 6vw, 52px);
   font-weight: 700;
   color: var(--color-primary);
-  letter-spacing: 2px;
+  letter-spacing: 3px;
+  opacity: 0.55;                 /* softer, reads as a placeholder until a photo is added */
 }
 
 .team-member-card h4 {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
   color: var(--color-text-dark);
   text-align: center;
-  margin-bottom: 5px;
+  margin: 0 0 5px;
+  padding: 0 16px;
   text-transform: none;
 }
 
 .team-member-card .title {
   font-size: 14px;
   color: var(--color-text-muted);
-  margin-bottom: 15px;
+  margin-bottom: 16px;
+  padding: 0 16px;
   text-transform: none;
   font-style: italic;
 }
@@ -709,9 +727,6 @@ footer.site-footer {
   .why-choose-grid, .minimal-boxes-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  .team-members-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
   h2.section-title {
     font-size: 42px;
   }
@@ -721,7 +736,7 @@ footer.site-footer {
 }
 
 @media (max-width: 768px) {
-  .why-choose-grid, .minimal-boxes-grid, .team-members-grid {
+  .why-choose-grid, .minimal-boxes-grid {
     grid-template-columns: 1fr;
     gap: 20px;
   }
