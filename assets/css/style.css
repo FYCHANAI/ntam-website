@@ -147,6 +147,8 @@ header.site-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  max-width: 1400px;   /* wider than the 980px body content so the top bar uses the screen */
+  padding: 0 30px;
 }
 
 .header-logo-link {
@@ -163,7 +165,9 @@ header.site-header {
 .nav-menu {
   display: flex;
   list-style: none;
-  gap: 20px;
+  flex: 1;                          /* fill the width to the right of the logo */
+  justify-content: space-between;   /* spread the items evenly across that width */
+  margin-left: 48px;                /* breathing room between the logo and the first item */
 }
 
 .nav-link {
@@ -174,6 +178,7 @@ header.site-header {
   letter-spacing: 0.05em;
   padding: 10px 5px;
   position: relative;
+  white-space: nowrap;   /* keep each item like "ABOUT US" on a single line */
 }
 
 .nav-link:hover, .nav-link.active {
@@ -735,17 +740,8 @@ footer.site-footer {
   }
 }
 
-@media (max-width: 768px) {
-  .why-choose-grid, .minimal-boxes-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  h2.section-title {
-    font-size: 32px;
-  }
-  p.intro-bold, p.intro-regular {
-    font-size: 18px;
-  }
+/* Navigation collapses to a hamburger menu once the full horizontal nav no longer fits on one line */
+@media (max-width: 1150px) {
   .hamburger {
     display: block;
   }
@@ -754,6 +750,8 @@ footer.site-footer {
     left: -100%;
     top: 128px; /* Header height offset */
     flex-direction: column;
+    justify-content: flex-start;   /* reset desktop spread for the vertical menu */
+    margin-left: 0;                /* reset desktop logo gap */
     background-color: var(--color-primary);
     width: 100%;
     height: calc(100vh - 128px);
@@ -774,6 +772,19 @@ footer.site-footer {
   }
   .hamburger.active .bar:nth-child(3) {
     transform: translateY(-7px) rotate(-45deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .why-choose-grid, .minimal-boxes-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  h2.section-title {
+    font-size: 32px;
+  }
+  p.intro-bold, p.intro-regular {
+    font-size: 18px;
   }
   .footer-bottom {
     flex-direction: column;
