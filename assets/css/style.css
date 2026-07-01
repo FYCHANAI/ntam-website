@@ -162,15 +162,10 @@ header.site-header {
   object-fit: contain;
 }
 
-.header-container > nav {
-  flex: 1;                          /* the nav wrapper fills the width to the right of the logo */
-  margin-left: 48px;                /* breathing room between the logo and the first item */
-}
 .nav-menu {
   display: flex;
   list-style: none;
-  width: 100%;                      /* fill the nav wrapper */
-  justify-content: space-between;   /* spread the items evenly across that width */
+  gap: 28px;                        /* fixed, equal spacing — looks identical in portrait & landscape */
 }
 
 .nav-link {
@@ -744,7 +739,7 @@ footer.site-footer {
 }
 
 /* Navigation collapses to a hamburger menu once the full horizontal nav no longer fits on one line */
-@media (max-width: 1150px) {
+@media (max-width: 1300px) {
   .hamburger {
     display: block;
   }
