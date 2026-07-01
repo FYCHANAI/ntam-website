@@ -162,12 +162,15 @@ header.site-header {
   object-fit: contain;
 }
 
+.header-container > nav {
+  flex: 1;                          /* the nav wrapper fills the width to the right of the logo */
+  margin-left: 48px;                /* breathing room between the logo and the first item */
+}
 .nav-menu {
   display: flex;
   list-style: none;
-  flex: 1;                          /* fill the width to the right of the logo */
+  width: 100%;                      /* fill the nav wrapper */
   justify-content: space-between;   /* spread the items evenly across that width */
-  margin-left: 48px;                /* breathing room between the logo and the first item */
 }
 
 .nav-link {
