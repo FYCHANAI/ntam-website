@@ -147,8 +147,8 @@ header.site-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1400px;   /* wider than the 980px body content so the top bar uses the screen */
-  padding: 0 30px;
+  max-width: none;     /* full-width: portrait & landscape both fill edge-to-edge (unified with the hero) */
+  padding: 0 40px;
 }
 
 .header-logo-link {
