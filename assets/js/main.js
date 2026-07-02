@@ -179,3 +179,64 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+
+/* ===== Disclaimer gate (shows once per browser session) ===== */
+(function () {
+  var KEY = 'ntamDisclaimerAccepted';
+  var accepted = false;
+  try { accepted = sessionStorage.getItem(KEY) === 'yes'; } catch (e) {}
+  if (accepted) return;
+
+  function init() {
+    var overlay = document.createElement('div');
+    overlay.className = 'disclaimer-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-labelledby', 'ntam-disclaimer-title');
+    overlay.innerHTML =
+      '<div class="disclaimer-panel">' +
+        '<div class="disclaimer-scroll">' +
+          '<h2 id="ntam-disclaimer-title">Nice Talent Asset Management Limited</h2>' +
+          '<h3>Disclaimer</h3>' +
+          '<p>By accessing this website and any of its pages, you accept the terms set out below. Nice Talent Asset Management Limited (\u201cCompany\u201d) may make any change(s) to these terms at any time by posting the updated terms on this website. By continuing to use this website following the posting of any change(s) to these terms, you signify your consent to the change(s) made. The Company also reserves the right to restrict, interrupt or terminate this website. No other form of notification will be delivered to you.</p>' +
+          '<h4>1. Use of Information</h4>' +
+          '<p>The information contained, and the investments (including but not limited to securities), products and services described, in this website is not intended to be made available to, and/or for use by, any person or any entity in any jurisdiction where such distribution or use would be contrary to the laws or regulations of such jurisdiction or would otherwise cause the Company to be subject to and/or violate any legal or regulatory requirement within such jurisdiction.</p>' +
+          '<h4>2. No offer / advice</h4>' +
+          '<p>Nothing contained in this web site constitutes or should be construed to constitute an offer, invitation, advice, recommendation or solicitation by the Company to buy, sell or otherwise deal with any investment, product or service. If you wish to invest in any of the investments/products or use any of the services mentioned in this web site, you should seek your own professional or other appropriate advice as and when necessary.</p>' +
+          '<h4>3. Intellectual Property</h4>' +
+          '<p>All contents and materials of this web site are protected by copyright and/or other intellectual property rights of the Company, the relevant information providers, the relevant licensors and other relevant third parties (including The Stock Exchange of Hong Kong Limited). No part of any such contents or materials may be copied, modified, reproduced, transmitted, disseminated, sold, distributed, published, displayed in public, broadcasted, circulated, stored for subsequent use or commercially exploited in any manner whatsoever and for any purpose without the prior written consent of the Company, the relevant information providers, the relevant licensors and other relevant third parties.</p>' +
+          '<h4>4. Exclusion/Limitation of Liability</h4>' +
+          '<p>While the information and materials contained in this web site have been obtained from sources believed to be reliable, such information and materials are provided on an \u201cas is\u201d basis without any representation, warranty or guarantee of any kind, whether express or implied, on the part of the Company and/or any relevant party, and is subject to change without prior notice. In particular, no representation, warranty or guarantee regarding non-infringement, security, accuracy, completeness, timeliness, reliability, fitness for any particular purpose or freedom from computer viruses is given in connection with such information and materials. Access to and/or use of this web site and/or its contents shall be at your own risks. In no event will the Company or any of its affiliates have any tortious, contractual or any other liability to you and/or any third party arising out of or in connection with any access to, use of or inability to access to this web site, or any reliance on any information or services provided in this web site (including but not limited to any direct, indirect, special, consequential, incidental or punitive damages whatsoever).</p>' +
+          '<h4>5. Indemnification</h4>' +
+          '<p>You will on demand indemnify the Company against all actions, claims, other liabilities and all costs suffered or incurred as a result of your use of this web site, including but not limited to the breach of any or all of these terms.</p>' +
+          '<h4>6. Linked/Associated Sites</h4>' +
+          '<p>Web sites linked to this web site are included for your convenience and information purpose only and have not been reviewed by the Company. The Company shall not be responsible for the contents of such linked web sites. Access to and use of such linked web sites are at your own risks and are subject to any terms and conditions applicable to such access or use. By providing links to these linked web sites, the Company shall not be deemed to endorse, recommend, approve, guarantee or introduce any third parties or the services/products they provide on their web site, or have any form of co-operation or association with such third parties and web sites. The Company is not a party to any contractual arrangements entered into between you and the provider of such linked web sites unless otherwise expressly specified or agreed to by the Company in writing.</p>' +
+          '<h4>7. Risks Disclosure</h4>' +
+          '<p>Transactions or communications over the internet may be subject to interruption, transmission blackout, delayed transmission and/or incorrect data transmission due to various reasons such as the public nature of the internet. The Company does not warrant or represent that any communication available or generated from this web site is free from virus or harmful components. The Company does not make any representations or warranties regarding the accuracy, functionality or performance of any third party software that may be used in connection with this web site. The Company assumes no liability whatsoever in this regard. You have sole responsibility for adequate protection and back up of data and for undertaking reasonable and appropriate precautions to scan for computer viruses or other destructive properties.</p>' +
+          '<h4>8. Others</h4>' +
+          '<p>(a) If there is any inconsistency between the English version and Chinese version of these terms, the English version shall prevail.</p>' +
+          '<p>(b) These terms shall be governed by, and construed in accordance with, the laws of the Hong Kong Special Administrative Region, and you agree to submit to the jurisdiction of the courts of Hong Kong Special Administrative Region in respect of any matters or disputes arising under this web site.</p>' +
+        '</div>' +
+        '<div class="disclaimer-actions">' +
+          '<button type="button" class="disclaimer-agree">I agree to accept all the above terms and conditions.</button>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(overlay);
+    var prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    var btn = overlay.querySelector('.disclaimer-agree');
+    btn.addEventListener('click', function () {
+      try { sessionStorage.setItem(KEY, 'yes'); } catch (e) {}
+      document.body.style.overflow = prevOverflow;
+      overlay.parentNode.removeChild(overlay);
+    });
+    btn.focus();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
