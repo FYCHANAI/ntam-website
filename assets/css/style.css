@@ -154,12 +154,35 @@ header.site-header {
 .header-logo-link {
   display: flex;
   align-items: center;
+  gap: 14px;
+  text-decoration: none;
 }
 
 .header-logo-img {
   width: 107px;
   height: 97px;
   object-fit: contain;
+}
+
+.header-logo-text {
+  color: #ffffff;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .header-logo-text {
+    font-size: 14px;
+  }
+  .header-logo-img {
+    width: 72px;
+    height: 66px;
+  }
+  .header-logo-link {
+    gap: 10px;
+  }
 }
 
 .nav-menu {
