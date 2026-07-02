@@ -3,9 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SERVICES | Nice Talent Asset Management Limited</title>
-  <meta name="description" content="View the services offered by Nice Talent Asset Management.">
+  <title>Services | Nice Talent Asset Management Limited</title>
+  <meta name="description" content="NTAM's core services: Investment Advisory, Discretionary Portfolio Management, and External Asset Management (EAM).">
   <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    /* ===== Services page (matches original design) ===== */
+    .sv-banner {
+      background: #10222b url('assets/images/services-banner.jpg') center / cover no-repeat;
+      min-height: 257px;
+    }
+    .sv-main {
+      background-color: #f6f9f5;
+      padding: 78px 0 110px;
+    }
+    .sv-wrap {
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .sv-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px;
+    }
+    .sv-item {
+      text-align: center;
+    }
+    .sv-item svg {
+      width: 118px;
+      height: 118px;
+    }
+    .sv-item h3 {
+      font-size: 25px;
+      font-weight: 600;
+      color: #1c2b50;
+      line-height: 1.4;
+      margin: 34px auto 0;
+      max-width: 340px;
+    }
+    @media (max-width: 860px) {
+      .sv-banner { min-height: 190px; }
+      .sv-grid { grid-template-columns: 1fr; gap: 56px; }
+      .sv-item h3 { font-size: 21px; margin-top: 24px; }
+    }
+  </style>
 </head>
 <body>
 
@@ -34,33 +75,42 @@
     </div>
   </header>
 
-  <section class="full-width-section bg-grey" style="padding: 60px 0 30px;">
-    <div class="content-container">
-      <h2 class="section-title" style="margin-bottom: 0;">SERVICES</h2>
-    </div>
-  </section>
+  <section class="sv-banner" role="img" aria-label="Our Services — Nice Talent Asset Management"></section>
 
-  <section class="full-width-section bg-white">
-    <div class="content-container">
-      
-      <div style="text-align: center; margin-bottom: 50px;">
-        <h3 class="section-subtitle">Our Services</h3>
-      </div>
+  <div class="sv-main">
+    <div class="sv-wrap">
+      <div class="sv-grid">
 
-      <div class="minimal-boxes-grid" style="grid-template-columns: repeat(3, 1fr);">
-        <div class="minimal-box-card">
+        <div class="sv-item">
+          <svg viewBox="0 0 120 120" aria-hidden="true">
+            <circle cx="46" cy="42" r="34" fill="#c5c7c4"/>
+            <circle cx="72" cy="64" r="36" fill="#0a5670"/>
+            <circle cx="18" cy="96" r="5" fill="#16163f"/>
+          </svg>
           <h3>Investment Advisory</h3>
         </div>
-        <div class="minimal-box-card">
+
+        <div class="sv-item">
+          <svg viewBox="0 0 120 120" fill="none" aria-hidden="true">
+            <circle cx="28" cy="14" r="5" fill="#16163f"/>
+            <path d="M18 74 L44 98" stroke="#c5c7c4" stroke-width="14" stroke-linecap="round"/>
+            <path d="M44 98 L104 18" stroke="#0a5670" stroke-width="14" stroke-linecap="round"/>
+          </svg>
           <h3>Discretionary Portfolio Management</h3>
         </div>
-        <div class="minimal-box-card">
+
+        <div class="sv-item">
+          <svg viewBox="0 0 120 120" aria-hidden="true">
+            <rect x="22" y="14" width="46" height="46" fill="#0a5670"/>
+            <rect x="50" y="42" width="46" height="46" fill="#c5c7c4"/>
+            <circle cx="106" cy="98" r="5" fill="#16163f"/>
+          </svg>
           <h3>External Asset Management (EAM)</h3>
         </div>
-      </div>
 
+      </div>
     </div>
-  </section>
+  </div>
 
   <footer class="site-footer">
     <div class="content-container footer-container">
