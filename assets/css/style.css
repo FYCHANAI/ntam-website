@@ -739,7 +739,7 @@ footer.site-footer {
 }
 
 /* Navigation collapses to a hamburger menu once the full horizontal nav no longer fits on one line */
-@media (max-width: 1450px) {
+@media (max-width: 1500px) {
   .hamburger {
     display: block;
   }
