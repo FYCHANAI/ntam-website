@@ -240,3 +240,22 @@ document.addEventListener('DOMContentLoaded', () => {
     init();
   }
 })();
+
+// Auto-update footer copyright year (edit once, correct every year)
+(function () {
+  function updateCopyrightYear() {
+    var year = new Date().getFullYear();
+    document.querySelectorAll('.footer-bottom div').forEach(function (el) {
+      if (/©\s*Copyright\s*\d{4}/.test(el.textContent)) {
+        el.textContent = el.textContent
+          .replace(/(©\s*Copyright\s*)\d{4}/, '$1' + year)
+          .replace(/Limited \./, 'Limited.');
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateCopyrightYear);
+  } else {
+    updateCopyrightYear();
+  }
+})();
