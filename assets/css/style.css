@@ -173,15 +173,30 @@ header.site-header {
 }
 
 @media (max-width: 560px) {
+  .header-container {
+    padding: 0 16px;
+  }
   .header-logo-text {
     font-size: 14px;
+    white-space: normal; /* allow long EN brand name to wrap instead of pushing the hamburger off-screen */
   }
   .header-logo-img {
     width: 72px;
     height: 66px;
+    flex-shrink: 0;
   }
   .header-logo-link {
     gap: 10px;
+    flex: 1 1 auto;
+    min-width: 0; /* lets the brand text block shrink inside the flex row */
+  }
+  .lang-switch {
+    margin: 0 10px;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .hamburger {
+    flex-shrink: 0;
   }
 }
 
