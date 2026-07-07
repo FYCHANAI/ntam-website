@@ -14,10 +14,13 @@
   <style>
     .home-news-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 24px;
     }
-    @media (max-width: 760px) {
+    @media (max-width: 900px) {
+      .home-news-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px) {
       .home-news-grid { grid-template-columns: 1fr; }
     }
     .why-choose-grid {
@@ -130,20 +133,13 @@
 
   <section class="full-width-section bg-light">
     <div class="content-container">
-      <h2 class="section-title">公司新闻</h2>
-
-      <a href="news.html"><img src="../assets/images/news-1.jpg" alt="颜伟恒于阿布扎比全球家族办公室投资论坛发表主题演讲" style="width: 100%; max-width: 760px; margin: 0 auto; border-radius: 8px; display: block;"></a>
-    </div>
-  </section>
-
-  <section class="full-width-section bg-white">
-    <div class="content-container">
       <h2 class="section-title">媒体报道</h2>
 
       <div class="home-news-grid">
-        <a href="media-coverage.html"><img src="../assets/images/home-news-1.jpg" alt="俊贤资产管理荣获香港商报企业大奖 2024" style="width: 100%; border-radius: 8px; display: block;"></a>
-        <a href="media-coverage.html"><img src="../assets/images/home-news-2.jpg" alt="俊贤资产管理荣获 2024 年度创新商业方案大奖" style="width: 100%; border-radius: 8px; display: block;"></a>
-        <a href="media-coverage.html"><img src="../assets/images/media-wrise-cover.jpg" alt="《2026中国家族办公室发展白皮书》专访特辑 — WRISE 昇世集团联合发布" style="width: 100%; border-radius: 8px; display: block;"></a>
+        <a href="media-coverage.html"><img src="../assets/images/media-wrise-cover.jpg" alt="《2026中国家族办公室发展白皮书》专访特辑 — WRISE 昇世集团联合发布" style="width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; display: block;"></a>
+        <a href="news.html"><img src="../assets/images/news-1.jpg" alt="颜伟恒于阿布扎比全球家族办公室投资论坛发表主题演讲" style="width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; display: block;"></a>
+        <a href="media-coverage.html"><img src="../assets/images/home-news-1.jpg" alt="俊贤资产管理荣获香港商报企业大奖 2024" style="width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; display: block;"></a>
+        <a href="media-coverage.html"><img src="../assets/images/home-news-2.jpg" alt="俊贤资产管理荣获 2024 年度创新商业方案大奖" style="width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; display: block;"></a>
       </div>
     </div>
   </section>
