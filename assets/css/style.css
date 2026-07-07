@@ -30,6 +30,7 @@ body {
   color: var(--color-text-dark);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 /* Layout Containers */
@@ -764,7 +765,15 @@ footer.site-footer {
 }
 
 /* Responsive Styles */
-@media (max-width: 1024px) {
+/* Laptop widths (1281-1600px): compress the desktop nav so it never overflows */
+@media (max-width: 1600px) and (min-width: 1281px) {
+  .header-container { padding: 0 24px; }
+  .header-logo-text { font-size: 16px; }
+  .nav-menu { gap: 14px; }
+  .nav-link { font-size: 13px; letter-spacing: 0.02em; padding: 10px 2px; }
+}
+
+@media (max-width: 1280px) {
   .why-choose-grid, .minimal-boxes-grid {
     grid-template-columns: repeat(2, 1fr);
   }
