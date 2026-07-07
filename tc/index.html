@@ -14,10 +14,13 @@
   <style>
     .home-news-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 24px;
     }
-    @media (max-width: 760px) {
+    @media (max-width: 900px) {
+      .home-news-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px) {
       .home-news-grid { grid-template-columns: 1fr; }
     }
     .why-choose-grid {
@@ -130,20 +133,13 @@
 
   <section class="full-width-section bg-light">
     <div class="content-container">
-      <h2 class="section-title">公司新聞</h2>
-
-      <a href="news.html"><img src="../assets/images/news-1.jpg" alt="顏偉恆於阿布扎比全球家族辦公室投資論壇發表主題演講" style="width: 100%; max-width: 760px; margin: 0 auto; border-radius: 8px; display: block;"></a>
-    </div>
-  </section>
-
-  <section class="full-width-section bg-white">
-    <div class="content-container">
       <h2 class="section-title">媒體報道</h2>
 
       <div class="home-news-grid">
-        <a href="media-coverage.html"><img src="../assets/images/home-news-1.jpg" alt="俊賢資產管理榮獲香港商報企業大獎 2024" style="width: 100%; border-radius: 8px; display: block;"></a>
-        <a href="media-coverage.html"><img src="../assets/images/home-news-2.jpg" alt="俊賢資產管理榮獲 2024 年度創新商業方案大獎" style="width: 100%; border-radius: 8px; display: block;"></a>
-        <a href="media-coverage.html"><img src="../assets/images/media-wrise-cover.jpg" alt="《2026中國家族辦公室發展白皮書》專訪特輯 — WRISE 昇世集團聯合發佈" style="width: 100%; border-radius: 8px; display: block;"></a>
+        <a href="media-coverage.html"><img src="../assets/images/media-wrise-cover.jpg" alt="《2026中國家族辦公室發展白皮書》專訪特輯 — WRISE 昇世集團聯合發佈" style="width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; display: block;"></a>
+        <a href="news.html"><img src="../assets/images/news-1.jpg" alt="顏偉恆於阿布扎比全球家族辦公室投資論壇發表主題演講" style="width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; display: block;"></a>
+        <a href="media-coverage.html"><img src="../assets/images/home-news-1.jpg" alt="俊賢資產管理榮獲香港商報企業大獎 2024" style="width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; display: block;"></a>
+        <a href="media-coverage.html"><img src="../assets/images/home-news-2.jpg" alt="俊賢資產管理榮獲 2024 年度創新商業方案大獎" style="width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; display: block;"></a>
       </div>
     </div>
   </section>
