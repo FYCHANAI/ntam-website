@@ -18,8 +18,23 @@
       gap: 24px;
       margin-bottom: 40px;
     }
+    .office-sg-tall {
+      grid-row: 1 / 3;
+      display: flex;
+      flex-direction: column;
+    }
+    .office-sg-tall img {
+      flex: 1;
+      min-height: 0;
+      width: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+      display: block;
+    }
     @media (max-width: 560px) {
       .office-sg-grid { grid-template-columns: 1fr; }
+      .office-sg-tall { grid-row: auto; }
+      .office-sg-tall img { flex: none; aspect-ratio: 3 / 4; }
     }
     .office-photo-caption {
       margin: 10px 0 0;
@@ -74,10 +89,9 @@
       <p style="text-align: center; color: #555555; margin: 0 0 40px;">3 Temasek Avenue, Centennial Tower, Singapore 039190</p>
       <img src="../assets/images/office-singapore-lounge-view.jpg" alt="俊贤资本办公室贵宾厅与新加坡市景" style="width: 100%; border-radius: 8px; display: block; margin: 0 0 24px;">
       <div class="office-sg-grid">
-        <div><img src="../assets/images/office-singapore-client-lounge.jpg" alt="俊贤资本新加坡贵宾接待区" style="width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; display: block;"><p class="office-photo-caption">贵宾接待区</p></div>
+        <div class="office-sg-tall"><img src="../assets/images/office-singapore-centennial-tower.jpg" alt="新加坡 Centennial Tower 大楼"><p class="office-photo-caption">Centennial Tower 大楼</p></div>
         <div><img src="../assets/images/office-singapore-pantry.jpg" alt="俊贤资本茶水吧" style="width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; display: block;"><p class="office-photo-caption">茶水吧</p></div>
-        <div><img src="../assets/images/office-singapore-centennial-tower.jpg" alt="新加坡 Centennial Tower 大楼" style="width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; display: block;"><p class="office-photo-caption">Centennial Tower 大楼</p></div>
-        <div><img src="../assets/images/office-singapore-meeting-room.jpg" alt="俊贤资本会议室" style="width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; display: block;"><p class="office-photo-caption">会议室</p></div>
+        <div><img src="../assets/images/office-singapore-client-lounge.jpg" alt="俊贤资本新加坡贵宾接待区" style="width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; display: block;"><p class="office-photo-caption">贵宾接待区</p></div>
       </div>
       <div style="text-align: center;">
         <a href="https://sgtgc.com/" target="_blank" rel="noopener noreferrer" style="display: inline-block; background-color: #0a5670; color: #ffffff; padding: 14px 38px; font-weight: 600; letter-spacing: .08em; text-decoration: none; border-radius: 4px;">俊贤资本 - 新加坡</a>
