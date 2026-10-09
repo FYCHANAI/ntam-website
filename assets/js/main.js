@@ -1,20 +1,91 @@
+// Keep a modal's background out of the keyboard and accessibility navigation.
+function ntamIsolateDialog(dialog) {
+  const previousOverflow = document.body.style.overflow;
+  const background = Array.from(document.body.children)
+    .filter(element => element !== dialog)
+    .map(element => ({ element, inert: element.inert }));
+  background.forEach(({ element }) => { element.inert = true; });
+  document.body.style.overflow = 'hidden';
+  return () => {
+    background.forEach(({ element, inert }) => { element.inert = inert; });
+    document.body.style.overflow = previousOverflow;
+  };
+}
+
+function ntamTrapDialogFocus(event, dialog) {
+  if (event.key !== 'Tab') return;
+  const elements = Array.from(dialog.querySelectorAll(
+    'a[href], button, input, select, textarea, [tabindex]'
+  )).filter(element => !element.disabled && element.tabIndex >= 0 &&
+    !element.closest('[inert]') && element.getClientRects().length > 0);
+  if (!elements.length) return;
+  const first = elements[0];
+  const last = elements[elements.length - 1];
+  if (event.shiftKey && (document.activeElement === first || !dialog.contains(document.activeElement))) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && (document.activeElement === last || !dialog.contains(document.activeElement))) {
+    event.preventDefault();
+    first.focus();
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Mobile Menu toggle
   const hamburger = document.querySelector('.hamburger');
   const navMenu = document.querySelector('.nav-menu');
   if (hamburger && navMenu) {
+    const mobileMenu = window.matchMedia('(max-width: 1500px)');
+    const header = document.querySelector('.site-header');
+    navMenu.id = navMenu.id || 'site-navigation-menu';
+    hamburger.setAttribute('aria-controls', navMenu.id);
+
+    const updateMenuPosition = () => {
+      if (header) {
+        const bottom = Math.max(0, header.getBoundingClientRect().bottom);
+        navMenu.style.setProperty('--nav-top', `${bottom}px`);
+      }
+    };
+    const setMenuOpen = (open, restoreFocus = false) => {
+      const expanded = mobileMenu.matches && open;
+      hamburger.classList.toggle('active', expanded);
+      navMenu.classList.toggle('active', expanded);
+      hamburger.setAttribute('aria-expanded', String(expanded));
+      if (restoreFocus) hamburger.focus();
+      navMenu.inert = mobileMenu.matches && !expanded;
+      if (navMenu.inert) navMenu.setAttribute('aria-hidden', 'true');
+      else navMenu.removeAttribute('aria-hidden');
+      updateMenuPosition();
+    };
+
     hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('active');
-      navMenu.classList.toggle('active');
+      const open = hamburger.getAttribute('aria-expanded') !== 'true';
+      setMenuOpen(open);
+      if (open) navMenu.querySelector('.nav-link')?.focus({ preventScroll: true });
     });
 
     // Close mobile menu when a link is clicked
     document.querySelectorAll('.nav-link').forEach(link => {
       link.addEventListener('click', () => {
-        hamburger.classList.remove('active');
-        navMenu.classList.remove('active');
+        setMenuOpen(false, mobileMenu.matches);
       });
     });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && hamburger.getAttribute('aria-expanded') === 'true') {
+        setMenuOpen(false, true);
+      }
+    });
+    header?.addEventListener('focusout', event => {
+      if (event.relatedTarget && !header.contains(event.relatedTarget)) setMenuOpen(false);
+    });
+    mobileMenu.addEventListener('change', () => {
+      const focusInMenu = navMenu.contains(document.activeElement);
+      setMenuOpen(false, mobileMenu.matches && focusInMenu);
+    });
+    window.addEventListener('resize', updateMenuPosition);
+    window.addEventListener('scroll', updateMenuPosition, { passive: true });
+    if (header && 'ResizeObserver' in window) new ResizeObserver(updateMenuPosition).observe(header);
+    setMenuOpen(false);
   }
 
   // 2. Team Bio Modals (Team Page)
@@ -26,8 +97,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const viewBioBtns = document.querySelectorAll('.btn-view-bio');
 
   let activeElementBeforeModal = null;
+  let restoreModalBackground = null;
 
   if (modalOverlay && modalCloseBtn && viewBioBtns.length > 0) {
+    modalOverlay.inert = true;
+    modalName.id = modalName.id || 'team-modal-name';
+    modalOverlay.setAttribute('aria-labelledby', modalName.id);
     const openModal = (name, title, bioContent) => {
       activeElementBeforeModal = document.activeElement;
       
@@ -36,7 +111,9 @@ document.addEventListener('DOMContentLoaded', () => {
       modalBioText.innerHTML = bioContent;
       
       modalOverlay.classList.add('active');
-      document.body.style.overflow = 'hidden'; // Prevent scrolling
+      modalOverlay.inert = false;
+      modalOverlay.setAttribute('aria-hidden', 'false');
+      restoreModalBackground = ntamIsolateDialog(modalOverlay);
       
       // Accessibility: Focus close button
       modalCloseBtn.focus();
@@ -44,11 +121,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const closeModal = () => {
       modalOverlay.classList.remove('active');
-      document.body.style.overflow = '';
+      if (restoreModalBackground) restoreModalBackground();
+      restoreModalBackground = null;
       
       if (activeElementBeforeModal) {
         activeElementBeforeModal.focus();
       }
+      modalOverlay.setAttribute('aria-hidden', 'true');
+      modalOverlay.inert = true;
     };
 
     viewBioBtns.forEach(btn => {
@@ -78,25 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Trap focus inside modal for accessibility
     modalOverlay.addEventListener('keydown', (e) => {
-      if (e.key === 'Tab') {
-        const focusableElements = modalOverlay.querySelectorAll('button, [tabindex="0"]');
-        if (focusableElements.length > 0) {
-          const firstElement = focusableElements[0];
-          const lastElement = focusableElements[focusableElements.length - 1];
-
-          if (e.shiftKey) { // Shift + Tab
-            if (document.activeElement === firstElement) {
-              lastElement.focus();
-              e.preventDefault();
-            }
-          } else { // Tab
-            if (document.activeElement === lastElement) {
-              firstElement.focus();
-              e.preventDefault();
-            }
-          }
-        }
-      }
+      ntamTrapDialogFocus(e, modalOverlay);
     });
   }
 
@@ -105,8 +167,37 @@ document.addEventListener('DOMContentLoaded', () => {
   const formMessage = document.getElementById('formMessage');
 
   if (contactForm && formMessage) {
+    const messages = {
+      en: {
+        required: 'Please fill in all required fields (Name, Email, Message).',
+        email: 'Please provide a valid email address.',
+        submitting: 'Submitting...',
+        success: 'Thank you! Your message has been sent. We will get back to you shortly.',
+        failure: 'Sorry, your message could not be sent. Please email us directly at info@ntam.com.hk.',
+        network: 'Network error. Please email us directly at info@ntam.com.hk.'
+      },
+      'zh-Hant': {
+        required: '請填寫所有必填欄位（姓名、電子郵件及訊息）。',
+        email: '請輸入有效的電子郵件地址。',
+        submitting: '正在發送…',
+        success: '謝謝！您的訊息已送出，我們會盡快回覆。',
+        failure: '抱歉，訊息未能送出。請直接電郵至 info@ntam.com.hk。',
+        network: '網絡連線出現問題。請直接電郵至 info@ntam.com.hk。'
+      },
+      'zh-Hans': {
+        required: '请填写所有必填字段（姓名、电子邮件及信息）。',
+        email: '请输入有效的电子邮件地址。',
+        submitting: '正在发送…',
+        success: '谢谢！您的信息已送出，我们会尽快回复。',
+        failure: '抱歉，信息未能送出。请直接电邮至 info@ntam.com.hk。',
+        network: '网络连接出现问题。请直接电邮至 info@ntam.com.hk。'
+      }
+    };
+    const copy = messages[document.documentElement.lang] || messages.en;
+    let submitting = false;
     contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+      if (submitting) return;
 
       // Retrieve form fields
       const name = document.getElementById('name').value.trim();
@@ -119,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Validation
       if (!name || !email || !message) {
-        formMessage.textContent = 'Please fill in all required fields (Name, Email, Message).';
+        formMessage.textContent = copy.required;
         formMessage.className = 'form-message error';
         formMessage.style.display = 'block';
         return;
@@ -128,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Simple email format regex
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
-        formMessage.textContent = 'Please provide a valid email address.';
+        formMessage.textContent = copy.email;
         formMessage.className = 'form-message error';
         formMessage.style.display = 'block';
         return;
@@ -137,11 +228,13 @@ document.addEventListener('DOMContentLoaded', () => {
       // Enter submitting state
       const submitBtn = contactForm.querySelector('.form-submit-btn');
       const originalBtnText = submitBtn ? submitBtn.textContent : 'Submit';
+      submitting = true;
+      contactForm.setAttribute('aria-busy', 'true');
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.textContent = 'Submitting...';
+        submitBtn.textContent = copy.submitting;
       }
-      formMessage.textContent = 'Submitting...';
+      formMessage.textContent = copy.submitting;
       formMessage.className = 'form-message success';
       formMessage.style.display = 'block';
 
@@ -158,18 +251,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         const result = await response.json();
 
-        if (result.success) {
-          formMessage.textContent = 'Thank you! Your message has been sent. We will get back to you shortly.';
+        if (response.ok && result.success) {
+          formMessage.textContent = copy.success;
           formMessage.className = 'form-message success';
           contactForm.reset();
         } else {
-          formMessage.textContent = 'Sorry, your message could not be sent. Please email us directly at info@ntam.com.hk.';
+          formMessage.textContent = copy.failure;
           formMessage.className = 'form-message error';
         }
       } catch (err) {
-        formMessage.textContent = 'Network error. Please email us directly at info@ntam.com.hk.';
+        formMessage.textContent = copy.network;
         formMessage.className = 'form-message error';
       } finally {
+        submitting = false;
+        contactForm.setAttribute('aria-busy', 'false');
         formMessage.style.display = 'block';
         if (submitBtn) {
           submitBtn.disabled = false;
@@ -196,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
     overlay.setAttribute('aria-labelledby', 'ntam-disclaimer-title');
     overlay.innerHTML =
       '<div class="disclaimer-panel">' +
-        '<div class="disclaimer-scroll">' +
+        '<div class="disclaimer-scroll" tabindex="0">' +
           '<h2 id="ntam-disclaimer-title">Nice Talent Asset Management Limited</h2>' +
           '<h3>Disclaimer</h3>' +
           '<p>By accessing this website and any of its pages, you accept the terms set out below. Nice Talent Asset Management Limited (\u201cCompany\u201d) may make any change(s) to these terms at any time by posting the updated terms on this website. By continuing to use this website following the posting of any change(s) to these terms, you signify your consent to the change(s) made. The Company also reserves the right to restrict, interrupt or terminate this website. No other form of notification will be delivered to you.</p>' +
@@ -223,15 +318,21 @@ document.addEventListener('DOMContentLoaded', () => {
         '</div>' +
       '</div>';
     document.body.appendChild(overlay);
-    var prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    var previousFocus = document.activeElement;
+    var restoreBackground = ntamIsolateDialog(overlay);
+    overlay.addEventListener('keydown', function (event) {
+      ntamTrapDialogFocus(event, overlay);
+    });
     var btn = overlay.querySelector('.disclaimer-agree');
     btn.addEventListener('click', function () {
       try { sessionStorage.setItem(KEY, 'yes'); } catch (e) {}
-      document.body.style.overflow = prevOverflow;
+      restoreBackground();
       overlay.parentNode.removeChild(overlay);
+      var focusTarget = previousFocus !== document.body && previousFocus && previousFocus.isConnected
+        ? previousFocus : document.querySelector('.header-logo-link');
+      if (focusTarget) focusTarget.focus({ preventScroll: true });
     });
-    btn.focus();
+    overlay.querySelector('.disclaimer-scroll').focus();
   }
 
   if (document.readyState === 'loading') {
