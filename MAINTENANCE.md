@@ -159,3 +159,12 @@
 - All six corresponding HTML pages use versioned image paths. The homepage tile uses `object-fit: contain`; the media preview displays the full square group photo, and the award photos use a responsive two-column / mobile single-column layout. The other award photo is preserved from the original press release. All nine links to the three PDFs use `?v=20261010-photo-correction`.
 - Pre-release checks: all three PDF pages rendered and visually inspected; PDF text / geometry / source-JPEG integrity checked; visible HTML body text and captions preserved; 204 affected-page local references and anchors resolve; three-language media styles match; JavaScript syntax and whitespace diff checks pass.
 - Local browser rendering was blocked by the execution environment. Exact production commit, Pages workflow and live response / browser verification must be recorded in the release result after deployment.
+
+## 12. 2026-10-10 Forbes photo aspect-ratio alignment
+
+- User-approved option: retain every word and person, crop excess empty space, and add minimal plain side borders where needed. No generative image changes, stretching or resampling were used.
+- Baseline / rollback point: `e76f3d79e3eac901f0d7a8d6df076e54b8222812`, preserved at `backup/pre-forbes-ratio-20261010`. Roll back with a new restoration commit and preserve intervening work.
+- Award photo: retained source rectangle `(0,75)-(1214,875)`, with 45 px plain charcoal borders at each side; output 1304 x 800. Group photo: retained source rectangle `(0,291)-(1443,1191)`, with 12 px plain charcoal borders at each side for text breathing room; output 1467 x 900. Both are exactly 1.63:1. Lossless PNGs preserve every retained source pixel.
+- Replaced the same two images in all three 11 September 2026 PDFs, using the original landscape photo frames. Text, font positions, links, branding, the other photos and the one-page layout are unchanged. Rendered pixels outside the two photo areas are identical to the previous production PDFs.
+- All three media pages and homepages now use the ratio-corrected assets. The corresponding homepage thumbnail is 1.63:1 with contain sizing. All nine PDF links use `?v=20261010-photo-ratio` for cache refresh.
+- Verification: all three PDFs rendered and visually checked; original retained pixels and embedded PDF pixels match exactly; six-page text and internal-reference checks, JavaScript syntax and whitespace checks pass. Full mobile and expanded-page browser interaction was not rerun; the existing disclaimer remains untouched.
