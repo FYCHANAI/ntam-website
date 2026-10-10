@@ -150,3 +150,12 @@
 - 免責聲明原文與基準程式逐字比對一致。第三方影片及服務後台不在本輪驗證範圍。
 
 回復點仍為第 8 節備份分支。撤回本輪時以新 revert commit 保留後續修改及歷史。
+
+## 11. 2026-10-10 Forbes ceremony photo correction
+
+- User-authorized scope: replace the two supplied ceremony photos in the 11 September 2026 English, Traditional Chinese and Simplified Chinese press releases, and update the corresponding media-page and homepage images before publishing.
+- Baseline / rollback point: `c698cd19662e677378a8428ee010b582a8b22519`, preserved at `backup/pre-forbes-photo-correction-20261010`. Use a restoration commit for rollback; preserve later unrelated changes.
+- All three PDFs retain their original text, font positions, links, branding, other photos and one-page layout. The two replacement JPEG streams are byte-identical to the supplied files and proportionally contained within the original photo areas. Poppler-rendered pixels outside those two photo areas are identical to the baseline.
+- All six corresponding HTML pages use versioned image paths. The homepage tile uses `object-fit: contain`; the media preview displays the full square group photo, and the award photos use a responsive two-column / mobile single-column layout. The other award photo is preserved from the original press release. All nine links to the three PDFs use `?v=20261010-photo-correction`.
+- Pre-release checks: all three PDF pages rendered and visually inspected; PDF text / geometry / source-JPEG integrity checked; visible HTML body text and captions preserved; 204 affected-page local references and anchors resolve; three-language media styles match; JavaScript syntax and whitespace diff checks pass.
+- Local browser rendering was blocked by the execution environment. Exact production commit, Pages workflow and live response / browser verification must be recorded in the release result after deployment.
